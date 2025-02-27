@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bq2589xpy"
+description = "i2c driver for bq2589x chargers"
+dynamic = ["version"]
+readme = "README.md"
+
+classifiers = [
+]
+license = {text = "MIT license"}
+dependencies = [
+]
+
+[tool.setuptools_scm]
+version_file = "_version.py"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"*" = ["*.*"]
+
+[tool.ruff]
+line-length = 119
+
+
