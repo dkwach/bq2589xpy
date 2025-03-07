@@ -6,8 +6,8 @@ from .i2c_backend import I2C
 class SMbusI2C(I2C):
     BUS_NUMBER = 1
 
-    def __init__(self):
-        self._bus = smbus.SMBus(self.BUS_NUMBER)
+    def __init__(self, bus_number: int | None = None):
+        self._bus = smbus.SMBus(bus_number or self.BUS_NUMBER)
         super().__init__()
 
     def write_byte(self, device_address: int, offset: int, value: int):
