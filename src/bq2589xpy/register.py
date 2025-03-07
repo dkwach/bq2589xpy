@@ -33,24 +33,29 @@ class RegisterMeta(type):
 
     def __new__(cls, name, bases, namespace):
         offset = 0
-        for value in namespace.values():
+        fields = []
+        for field_name, value in namespace.items():
             if isinstance(value, BitField):
+                fields.append(field_name)
                 value.offset = offset
                 offset += value.width
 
         new_cls = super().__new__(cls, name, bases, namespace)
         new_cls.size = offset
+        new_cls._fields_ = tuple(fields)
         return new_cls
 
 
 class Register(metaclass=RegisterMeta):
+    _fields_: tuple[str] = ()
     size: int = 0
 
     def __init__(self, value: int = 0) -> None:
         self._value = value
 
     def __repr__(self) -> str:
-        return f"<Register value=0x{self._value:02X}, 0b{self._value:b}>"
+        bits = " ".join(f"{f}:0b{getattr(self, f):b}" for f in self._fields_)
+        return f"<{type(self).__name__} value=0x{self._value:02X}, 0b{self._value:b}>: {bits}"
 
     @property
     def value(self) -> int:
@@ -73,6 +78,7 @@ if __name__ == "__main__":
         AND_ONE_MORE = BitField(1)
 
     r0 = Reg0(0b101010)
+    print(r0)
     r0.FLAG = 1
     r0.SOME_SETTING = 0b11101
 
