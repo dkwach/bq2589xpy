@@ -12,7 +12,7 @@ class Bq25895Driver:
         return r
 
     def write(self, r: bq_registers.BqRegister) -> None:
-        self._i2c.write_byte(self._device_address, r.address())
+        self._i2c.write_byte(self._device_address, r.address(), r.value)
 
     def read_faults(self) -> bq_registers.REG0C:
         return self.read(bq_registers.REG0C())
