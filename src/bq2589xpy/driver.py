@@ -23,8 +23,13 @@ class Bq25895Driver:
     def read_status(self) -> bq_registers.REG0B:
         return self.read(bq_registers.REG0B())
 
+    def read_bat_adc(self) -> bq_registers.REG0E:
+        return self.read(bq_registers.REG0E())
+
     def trigger_adc_conversion(self):
-        raise NotImplementedError
+        reg02: bq_registers.REG02 = self.read(bq_registers.REG02())
+        reg02.CONV_START = 1
+        self.write(reg02)
 
     def configure_otg(self, enable=True):
         reg03: bq_registers.REG03 = self.read(bq_registers.REG03())

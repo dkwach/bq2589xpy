@@ -338,4 +338,7 @@ if __name__ == "__main__":
     r11 = REG11()
     r12 = REG12()
     r12.address()
-    pass
+
+    print(r02)
+    r02.CONV_START = 1
+    print(r02)

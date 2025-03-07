@@ -55,7 +55,7 @@ class Register(metaclass=RegisterMeta):
 
     def __repr__(self) -> str:
         bits = " ".join(f"{f}:0b{getattr(self, f):b}" for f in self._fields_)
-        return f"<{type(self).__name__} value=0x{self._value:02X}, 0b{self._value:b}>: {bits}"
+        return f"<{type(self).__name__} value=0x{self._value:02X}, 0b{self._value:8b}>: {bits}"
 
     @property
     def value(self) -> int:
