@@ -1,9 +1,9 @@
 from . import bq_registers
-from .communication.i2c import I2C
+from .communication.i2c_backend import I2C
 
 
 class Bq25895Driver:
-    def __init__(self, device_address: int, i2c: I2C):
+    def __init__(self, i2c: I2C, device_address: int = 0x6A):
         self._i2c = i2c
         self._device_address = device_address
 

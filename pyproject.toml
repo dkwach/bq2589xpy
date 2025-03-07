@@ -12,6 +12,7 @@ classifiers = [
 ]
 license = {text = "MIT license"}
 dependencies = [
+    "smbus2",
 ]
 
 [tool.setuptools_scm]
