@@ -170,11 +170,26 @@ class REG03(BqRegister):
     1 – Enabled"""
 
 
+class REG04(BqRegister):
+    ICHG = BqBitField(width=7, default=0b0100000, bit_type=READ_WRITE, reset=Reset.SOFTWARE | Reset.WATCHDOG)
+    """Fast Charge Current Limit
+    Offset: 0mARange: 0mA (0000000) – 5056mA (1001111)
+    Default: 2048mA (0100000)
+    Note:
+    ICHG=000000 (0mA) disables charge
+    ICHG > 1001111 (5056mA) is clamped to register value 1001111 (5056mA)"""
+
+    EN_PUMPX = BqBitField(width=1, default=0, bit_type=READ_WRITE, reset=Reset.SOFTWARE | Reset.WATCHDOG)
+    """Current pulse control Enable
+    0 - Disable Current pulse control (default)
+    1- Enable Current pulse control (PUMPX_UP and PUMPX_DN)"""
+
+
 class REG0B(BqRegister):
     VSYS_STAT = BqBitField(width=1, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """VSYS Regulation Status
     0 – Not in VSYSMIN regulation (BAT > VSYSMIN)
-    1 – In VSYSMIN regulation (BAT < VSYSMIN"""
+    1 – In VSYSMIN regulation (BAT < VSYSMIN)"""
 
     SDP_STAT = BqBitField(width=1, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """USB Input Status
@@ -188,9 +203,11 @@ class REG0B(BqRegister):
     1 – Power Good"""
 
     CHRG_STAT = BqBitField(width=2, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
-    """VSYS Regulation Status
-    0 – Not in VSYSMIN regulation (BAT > VSYSMIN)
-    1 – In VSYSMIN regulation (BAT < VSYSMIN"""
+    """Charging Status
+    00 – Not Charging
+    01 – Pre-charge ( < VBATLOWV)
+    10 – Fast Charging
+    11 – Charge Termination Done"""
 
     VBUS_STAT = BqBitField(width=3, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """BUS Status register
