@@ -2,7 +2,7 @@ from . import bq_registers
 from .communication.i2c_backend import I2C
 
 
-class Bq25895Driver:
+class Driver:
     def __init__(self, i2c: I2C, device_address: int = 0x6A):
         self._i2c = i2c
         self._device_address = device_address
@@ -13,6 +13,30 @@ class Bq25895Driver:
 
     def write(self, r: bq_registers.BqRegister) -> None:
         self._i2c.write_byte(self._device_address, r.address(), r.value)
+
+
+class Bq25895Driver(Driver):
+    REG00 = bq_registers.REG00
+    # REG01 = bq_registers.REG01
+    REG02 = bq_registers.REG02
+    REG03 = bq_registers.REG03
+    REG04 = bq_registers.REG04
+    # REG05 = bq_registers.REG05
+    # REG06 = bq_registers.REG06
+    # REG07 = bq_registers.REG07
+    # REG08 = bq_registers.REG08
+    # REG09 = bq_registers.REG09
+    # REG0A = bq_registers.REG0A
+    REG0B = bq_registers.REG0B
+    REG0C = bq_registers.REG0C
+    # REG0D = bq_registers.REG0D
+    REG0E = bq_registers.REG0E
+    REG0F = bq_registers.REG0F
+    # REG10 = bq_registers.REG10
+    REG11 = bq_registers.REG11
+    REG12 = bq_registers.REG12
+    # REG13 = bq_registers.REG13
+    # REG14 = bq_registers.REG14
 
     def read_faults(self) -> bq_registers.REG0C:
         return self.read(bq_registers.REG0C())
