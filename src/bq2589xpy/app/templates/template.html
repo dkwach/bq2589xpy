@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Register</th>
+                <th>Value</th>
+                <th>Bit Fields</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg_name, reg_data in registers.items() %}
+            <tr>
+                <td>{{ reg_name }}</td>
+                <td>{{ '{:08b}'.format(reg_data.value) }}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bit Field Name</th>
+                                <th>Value</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bit_name, bit_data in reg_data.bit_fields.items() %}
+                            <tr>
+                                <td>{{ bit_name }}</td>
+                                <td>{{ '{:0{size}b}'.format(bit_data.value, size=bit_data.size) }}</td>
+                                <td>{{ bit_data.doc|safe }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,38 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+th, td:first-child {
+    width: 20%;
+}
+
+td:nth-child(2) {
+    width: 20%;
+}
+
+td:nth-child(3) {
+    width: 90%;
+}
+
+table table {
+    width: 100%;
+}
+
+table table th, table table td {
+    font-size: small;
+}
+
+table table td:nth-child(3) {
+    width: 100%;
+}
