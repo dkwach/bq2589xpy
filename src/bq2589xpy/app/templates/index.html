@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        let intervalId = null;
+
+        async function updateRegisters() {
+            const response = await fetch('/registers');
+            const html = await response.text();
+            document.getElementById("registersContainer").innerHTML = html;
+            // toggleRefresh()
+        }
+
+        function startAutoRefresh() {
+            const periodInput = document.getElementById('update-period');
+            const period = parseInt(periodInput.value, 10) * 1000;
+            if (!intervalId) {
+                intervalId = setInterval(() => {
+                    updateRegisters();
+                }, period);
+                document.getElementById("toggleBtn").innerText = "Stop Auto-Refresh";
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                document.getElementById("toggleBtn").innerText = "Start Auto-Refresh";
+            }
+        }
+
+        function toggleRefresh() {
+            if (intervalId) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+            }
+        }
+
+        window.onload = function () {
+            updateRegisters();
+        };
+    </script>
+</head>
+<body>
+    <div id="controlContainer">
+        <input id="update-period" type="number" placeholder="Update period (s)"     min="1">
+        <button id="toggleBtn" onclick="toggleRefresh()">Enable Cyclic Update</button>
+        <button id="refreshBtn" onclick="updateRegisters()">Refresh</button>
+    </div>
+    <div id="registersContainer">
+        <!-- The register will be loaded here -->
+    </div>
+</body>
+</html>

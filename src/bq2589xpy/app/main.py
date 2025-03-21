@@ -21,6 +21,11 @@ def get_bit_filed_doc(reg: Register, bit_field_name: str):
 
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+
+@app.route("/registers")
+def registers():
     registers = collections.OrderedDict()
     for reg_name in dir(Bq25895Driver):
         if reg_name.startswith("REG"):
@@ -41,7 +46,7 @@ def index():
                 "bit_fields": bit_fields,
             }
 
-    return render_template("template.html", registers=registers)
+    return render_template("registers.html", registers=registers)
 
 
 if __name__ == "__main__":
