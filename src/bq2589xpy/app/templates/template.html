@@ -4,9 +4,57 @@
     <meta charset="UTF-8">
     <title>Registers</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        let intervalId = null;
+
+        function refresh() {
+            location.reload();  
+        }
+
+        function startAutoRefresh() {
+            const periodInput = document.getElementById('update-period');
+            const period = parseInt(periodInput.value, 10) * 1000;
+            if (!intervalId) {
+                intervalId = setInterval(() => {
+                    location.reload();
+                }, period);
+                document.getElementById("toggleBtn").innerText = "Stop Auto-Refresh";
+                localStorage.setItem("autoRefresh", "on");
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                document.getElementById("toggleBtn").innerText = "Start Auto-Refresh";
+                localStorage.setItem("autoRefresh", "off");
+            }
+        }
+
+        function toggleRefresh() {
+            if (intervalId) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+            }
+        }
+
+        window.onload = function () {
+            const savedState = localStorage.getItem("autoRefresh");
+            if (savedState === "on") {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        };
+    </script>
 </head>
 <body>
-    <table>
+    <input id="update-period" type="number" placeholder="Update period (s)"     min="1">
+    <button id="toggleBtn" onclick="toggleRefresh()">Enable Cyclic Update</button>
+    <button id="refreshBtn" onclick="refresh()">Refresh</button>
+    <table> 
         <thead>
             <tr>
                 <th>Register</th>

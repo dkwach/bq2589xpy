@@ -67,9 +67,15 @@ class Bq25895Driver(Driver):
         self.write(reg03)
 
 
-def create() -> Bq25895Driver:
-    from bq2589xpy.communication import smbus
+def create(backend: str = "") -> Bq25895Driver:
+    if backend == "smbus":
+        from bq2589xpy.communication import smbus
 
-    i2c_backend = smbus.SMbusI2C()
+        i2c_backend = smbus.SMbusI2C()
+    else:
+        from bq2589xpy.communication import mock
+
+        i2c_backend = mock.MockI2C()
+
     d = Bq25895Driver(i2c_backend)
     return d
