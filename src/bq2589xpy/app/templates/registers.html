@@ -10,7 +10,12 @@
         {% for reg_name, reg_data in registers.items() %}
         <tr>
             <td>{{ reg_name }}</td>
-            <td>{{ '{:08b}'.format(reg_data.value) }}</td>
+            <td>
+                <form method="POST" action="/update_register">
+                    <input type="hidden" name="register" value="{{ reg_name }}">
+                    <input type="text" name="value" value="{{ '{:08b}'.format(reg_data.value) }}" maxlength="8" onkeypress="submitOnEnter(event, this.form)">
+                </form>
+            </td>
             <td>
                 <table>
                     <thead>
@@ -24,7 +29,13 @@
                         {% for bit_name, bit_data in reg_data.bit_fields.items() %}
                         <tr>
                             <td>{{ bit_name }}</td>
-                            <td>{{ '{:0{size}b}'.format(bit_data.value, size=bit_data.size) }}</td>
+                            <td>
+                                <form method="POST" action="/update_bit_field">
+                                    <input type="hidden" name="register" value="{{ reg_name }}">
+                                    <input type="hidden" name="bit_field" value="{{ bit_name }}">
+                                    <input type="text" name="value" value="{{ '{:0{size}b}'.format(bit_data.value, size=bit_data.size) }}" maxlength="{{ bit_data.size }}" onkeypress="submitOnEnter(event, this.form)">
+                                </form>
+                            </td>
                             <td>{{ bit_data.doc|safe }}</td>
                         </tr>
                         {% endfor %}
