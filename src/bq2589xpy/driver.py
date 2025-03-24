@@ -2,6 +2,7 @@ import threading
 
 from . import bq_registers
 from .communication.i2c_backend import I2C
+from .communication.thread_safe_i2c import ThreadSafeI2C
 
 
 class Driver:
@@ -11,13 +12,11 @@ class Driver:
         self._lock = threading.Lock()
 
     def read(self, r: bq_registers.BqRegister) -> bq_registers.BqRegister:
-        with self._lock:
-            r.value = self._i2c.read_byte(self._device_address, r.address())
+        r.value = self._i2c.read_byte(self._device_address, r.address())
         return r
 
     def write(self, r: bq_registers.BqRegister) -> None:
-        with self._lock:
-            self._i2c.write_byte(self._device_address, r.address(), r.value)
+        self._i2c.write_byte(self._device_address, r.address(), r.value)
 
 
 class Bq25895Driver(Driver):
@@ -82,5 +81,6 @@ def create(backend: str = "") -> Bq25895Driver:
 
         i2c_backend = mock.MockI2C()
 
-    d = Bq25895Driver(i2c_backend)
+    thread_safe_i2c = ThreadSafeI2C(i2c_backend)  # Wrap the I2C backend with the thread-safe decorator
+    d = Bq25895Driver(thread_safe_i2c)
     return d
