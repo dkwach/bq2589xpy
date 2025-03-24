@@ -8,13 +8,17 @@
         let intervalId = null;
         let isEditing = false;
 
-        async function updateRegisters() {
-            if (!isEditing) {
-                const response = await fetch('/registers');
-                const html = await response.text();
+        async function handle_register_response(response) {
+            const html = await response.text();
                 document.getElementById("registersContainer").innerHTML = html;
                 attachInputListeners(); // Reattach listeners after updating content
                 attachFormListeners(); // Attach form listeners for dynamic updates
+        }
+
+        async function updateRegisters() {
+            if (!isEditing) {
+                const response = await fetch('/read_registers');
+                handle_register_response(response);
             }
         }
 
@@ -35,7 +39,8 @@
             });
             const result = await response.json();
             if (result.status === "success") {
-                updateRegisters(); // Refresh the registers dynamically
+                const response = await fetch('/registers');
+                handle_register_response(response);
             } else {
                 alert(result.message || "An error occurred.");
             }
