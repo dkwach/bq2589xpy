@@ -1,3 +1,5 @@
+import threading
+
 from . import bq_registers
 from .communication.i2c_backend import I2C
 
@@ -6,13 +8,16 @@ class Driver:
     def __init__(self, i2c: I2C, device_address: int = 0x6A):
         self._i2c = i2c
         self._device_address = device_address
+        self._lock = threading.Lock()
 
     def read(self, r: bq_registers.BqRegister) -> bq_registers.BqRegister:
-        r.value = self._i2c.read_byte(self._device_address, r.address())
+        with self._lock:
+            r.value = self._i2c.read_byte(self._device_address, r.address())
         return r
 
     def write(self, r: bq_registers.BqRegister) -> None:
-        self._i2c.write_byte(self._device_address, r.address(), r.value)
+        with self._lock:
+            self._i2c.write_byte(self._device_address, r.address(), r.value)
 
 
 class Bq25895Driver(Driver):
