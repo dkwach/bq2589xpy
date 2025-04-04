@@ -36,3 +36,7 @@ table table th, table table td {
 table table td:nth-child(3) {
     width: 100%;
 }
+
+.changed {
+    background-color: #ffcccc; /* Light red background for changed rows */
+}

@@ -21,6 +21,20 @@ driver = create()
 # python -m flask run
 
 
+class ValueHistory:
+    def __init__(self):
+        self.previous_values = {}
+
+    def check_history(self, key: str = None, value: str = None):
+        previous = self.previous_values.get(key)
+        is_changed = previous is not None and previous != value
+        self.previous_values[key] = value
+        return is_changed
+
+
+value_history = ValueHistory()
+
+
 def get_registers(update: bool = False):
     registers = collections.OrderedDict()
     for reg_name in dir(driver):
@@ -31,18 +45,22 @@ def get_registers(update: bool = False):
 
             reg = type(reg_instance)
             bit_fields = collections.OrderedDict()
+
             for bit_name in reg._fields_:
                 bit_field = getattr(reg_instance, bit_name)
                 bit_fields[bit_name] = {
                     "value": bit_field,
                     "doc": get_bit_filed_doc(reg_instance, bit_name),
                     "size": getattr(reg, bit_name).width,
+                    "has_changed": value_history.check_history(f"{reg_name}{bit_name}", bit_field),
                 }
+
             registers[reg_name] = {
                 "address": reg_instance.address(),
                 "value": reg_instance.value,
                 "doc": reg.__doc__,
                 "bit_fields": bit_fields,
+                "has_changed": value_history.check_history(reg_name, reg_instance.value),
             }
 
     return registers
