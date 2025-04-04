@@ -13,6 +13,9 @@ from bq2589xpy.register import Register
 app = Flask(__name__)
 driver = create()
 
+# todo: consider to rewrite the following code to use Quart instead of Flask
+# to make code more async-friendly, or consider to migrate to microdot
+# to have support for micropython
 
 # set FLASK_APP=bq2589xpy/app/main.py
 # python -m flask run
