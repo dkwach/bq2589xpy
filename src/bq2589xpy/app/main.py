@@ -1,8 +1,6 @@
 import collections
 import inspect
 import re
-import threading
-import time
 from functools import lru_cache
 
 from flask import Flask, jsonify, render_template, request
@@ -110,15 +108,6 @@ def update_bit_field():
         {"status": "success", "message": f"Bit field {bit_field_name} in register {reg_name} updated successfully."}
     )
 
-
-def reset_watchdog_periodically():
-    while True:
-        driver.reset_watchdog()
-        time.sleep(20)
-
-
-# Start the background thread
-threading.Thread(target=reset_watchdog_periodically, daemon=True).start()
 
 if __name__ == "__main__":
     app.run(debug=True)
