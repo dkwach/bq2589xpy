@@ -1,3 +1,26 @@
+#controlContainer {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Ensure it has a background to cover content behind it */
+    z-index: 1000; /* Keep it above other elements */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* Optional: Add a border for better visibility */
+}
+
+#controlContainer input[type="text"] {
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#registersContainer {
+    margin-top: 10px; /* Add some spacing below the control container */
+    overflow-y: auto;
+    max-height: calc(100vh - 100px); /* Adjust height to fit the viewport */
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
