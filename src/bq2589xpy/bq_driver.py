@@ -1,9 +1,12 @@
+import logging
 import threading
 import time
 
 from bq2589xpy import bq_registers
 from bq2589xpy.communication.thread_safe_i2c import ThreadSafeI2C
 from bq2589xpy.driver import Driver
+
+logger = logging.getLogger(__name__)
 
 
 class Bq25895Driver(Driver):
@@ -59,6 +62,7 @@ class Bq25895Driver(Driver):
 
     def reset_watchdog_periodically(self):
         while True:
+            logger.info("Reset watchdog")
             self.reset_watchdog()
             time.sleep(20)
 

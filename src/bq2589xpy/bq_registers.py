@@ -154,7 +154,7 @@ class REG03(BqRegister):
     0 - Charge Disable
     1- Charge Enable (default)"""
 
-    OTG_CONFIG = BqBitField(width=1, default=1, bit_type=READ_WRITE, reset=Reset.REG_RST)
+    OTG_CONFIG = BqBitField(width=1, default=1, bit_type=READ_WRITE, reset=Reset.REG_RST | Reset.WATCHDOG)
     """Boost (OTG) Mode Configuration
     0 – OTG Disable
     1 – OTG Enable (default)"""

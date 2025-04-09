@@ -67,7 +67,7 @@ def get_registers(update: bool = False):
 @lru_cache
 def get_bit_filed_doc(reg: Register, bit_field_name: str):
     source = inspect.getsource(type(reg))
-    doc = re.search(rf'{bit_field_name}.*?"""(.*?)"""', source, re.DOTALL)
+    doc = re.search(rf'{bit_field_name} =.*?"""(.*?)"""', source, re.DOTALL)
     return doc.group(1).replace("\n", "<br>") if doc else ""
 
 
