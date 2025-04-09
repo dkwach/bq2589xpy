@@ -26,7 +26,7 @@ class Bq25895Driver(Driver):
     # REG0D = bq_registers.REG0D()
     REG0E = bq_registers.REG0E()
     REG0F = bq_registers.REG0F()
-    # REG10 = bq_registers.REG10()
+    REG10 = bq_registers.REG10()
     REG11 = bq_registers.REG11()
     REG12 = bq_registers.REG12()
     # REG13 = bq_registers.REG13()

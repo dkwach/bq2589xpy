@@ -300,6 +300,26 @@ class REG0F(BqRegister):
     """
 
 
+class REG10(BqRegister):
+    TSPCT = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """ADC conversion of TS Voltage (TS) as percentage of REGN
+    Offset: 21%
+    Range 21% (0000000) – 80% (1111111)
+    Default: 21% (0000000)
+    TODO MAPPING: 
+        TSPCT[6] -> 29.76%
+        TSPCT[5] -> 14.88%
+        TSPCT[4] -> 7.44%
+        TSPCT[3] -> 3.72%
+        TSPCT[2] -> 1.86%
+        TSPCT[1] -> 0.93%
+        TSPCT[0] -> 0.465%"""
+
+    Reserved = BqBitField(width=1, default=0, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """Reserved: Always reads 0
+    """
+
+
 class REG11(BqRegister):
     VBUSV = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADC conversion of VBUS voltage (VBUS)
