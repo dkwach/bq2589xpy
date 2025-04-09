@@ -344,6 +344,31 @@ class REG12(BqRegister):
     """Always reads 0"""
 
 
+class REG14(BqRegister):
+    DEV_REV = BqBitField(width=2, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """Device Revision: 01"""
+
+    TS_PROFILE = BqBitField(width=1, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """Temperature Profile
+    0 – Cold/Hot (default)"""
+
+    PN = BqBitField(width=3, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """Device Configuration
+    111: BQ25895"""
+
+    ICO_OPTIMIZED = BqBitField(width=1, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
+    """Input Current Optimizer (ICO) Status
+    0 – Optimization is in progress
+    1 – Maximum Input Current Detected"""
+
+    REG_RST = BqBitField(width=1, default=0, bit_type=READ_WRITE, reset=Reset.NOT_SPECIFIED)
+    """Register Reset
+    0 – Keep current register setting (default)
+    1 – Reset to default register value and reset safety timer
+    Note:
+    Reset to 0 after register reset is completed"""
+
+
 if __name__ == "__main__":
     r00 = REG00()
     r02 = REG02()
