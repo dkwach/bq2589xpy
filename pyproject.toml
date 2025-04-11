@@ -11,9 +11,13 @@ readme = "README.md"
 classifiers = [
 ]
 license = {text = "MIT license"}
+
 dependencies = [
     "smbus2",
 ]
+
+[project.optional-dependencies]
+ui = ["flask"]
 
 [tool.setuptools_scm]
 version_file = "_version.py"

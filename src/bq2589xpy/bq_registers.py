@@ -212,7 +212,8 @@ class REG0B(BqRegister):
     VBUS_STAT = BqBitField(width=3, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """BUS Status register
     BQ25895
-    000: No Input 001: USB Host SDP
+    000: No Input 
+    001: USB Host SDP
     010: USB CDP (1.5A)
     011: USB DCP (3.25A)
     100: Adjustable High Voltage DCP (MaxCharge) (1.5A)
