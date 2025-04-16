@@ -1,9 +1,7 @@
 import logging
-import threading
 import time
 
 from bq2589xpy import bq_registers
-from bq2589xpy.communication.thread_safe_i2c import ThreadSafeI2C
 from bq2589xpy.driver import Driver
 
 logger = logging.getLogger(__name__)
@@ -31,6 +29,9 @@ class Bq25895Driver(Driver):
     REG12 = bq_registers.REG12()
     # REG13 = bq_registers.REG13()
     REG14 = bq_registers.REG14()
+
+    def __init__(self, i2c, device_address: int = 0x6A):
+        super().__init__(i2c, device_address)
 
     def read_faults(self) -> bq_registers.REG0C:
         return self.read(bq_registers.REG0C())
@@ -65,19 +66,3 @@ class Bq25895Driver(Driver):
             logger.info("Reset watchdog")
             self.reset_watchdog()
             time.sleep(20)
-
-
-def create(backend: str = "") -> Bq25895Driver:
-    if backend == "smbus":
-        from bq2589xpy.communication import smbus
-
-        i2c_backend = smbus.SMbusI2C()
-    else:
-        from bq2589xpy.communication import mock
-
-        i2c_backend = mock.MockI2C()
-
-    thread_safe_i2c = ThreadSafeI2C(i2c_backend)  # Wrap the I2C backend with the thread-safe decorator
-    d = Bq25895Driver(thread_safe_i2c)
-    threading.Thread(target=d.reset_watchdog_periodically, daemon=True).start()
-    return d
