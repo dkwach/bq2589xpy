@@ -42,7 +42,8 @@
             });
             const result = await response.json();
             if (result.status === "success") {
-                const response = await fetch('/registers');
+                const driver = document.getElementById('driver-select').value;
+                const response = await fetch(`/registers?driver=${driver}`);
                 handle_register_response(response);
             } else {
                 alert(result.message || "An error occurred.");
