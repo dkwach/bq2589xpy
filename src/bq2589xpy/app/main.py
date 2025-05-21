@@ -1,5 +1,6 @@
 import collections
 import inspect
+import os
 import re
 from functools import lru_cache
 
@@ -9,7 +10,7 @@ from bq2589xpy.driver_builder import create
 from bq2589xpy.register import Register
 
 app = Flask(__name__)
-drivers = create()
+drivers = create(os.environ.get("I2C_BACKEND", "mock"))  # default to mock backend
 
 # todo: consider to rewrite the following code to use Quart instead of Flask
 # to make code more async-friendly, or consider to migrate to microdot
