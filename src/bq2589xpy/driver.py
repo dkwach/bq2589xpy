@@ -1,19 +1,33 @@
-from bq2589xpy.communication.i2c_backend import I2C
-from bq2589xpy.register import Register
+import logging
+
+from bq2589xpy import registers
+from ic_driver_composer.driver import Driver
+
+logger = logging.getLogger(__name__)
 
 
-class Driver:
-    def __init__(self, i2c: I2C, device_address: int):
-        self._i2c = i2c
-        self._device_address = device_address
+class Bq25895Driver(Driver):
+    REG00 = registers.REG00()
+    # REG01 = bq_registers.REG01()
+    REG02 = registers.REG02()
+    REG03 = registers.REG03()
+    REG04 = registers.REG04()
+    # REG05 = bq_registers.REG05()
+    # REG06 = bq_registers.REG06()
+    # REG07 = bq_registers.REG07()
+    # REG08 = bq_registers.REG08()
+    # REG09 = bq_registers.REG09()
+    # REG0A = bq_registers.REG0A()
+    REG0B = registers.REG0B()
+    REG0C = registers.REG0C()
+    # REG0D = bq_registers.REG0D()
+    REG0E = registers.REG0E()
+    REG0F = registers.REG0F()
+    REG10 = registers.REG10()
+    REG11 = registers.REG11()
+    REG12 = registers.REG12()
+    # REG13 = bq_registers.REG13()
+    REG14 = registers.REG14()
 
-    @classmethod
-    def name(cls) -> str:
-        return cls.__name__
-
-    def read(self, r: Register) -> Register:
-        r.value = self._i2c.read_byte(self._device_address, r.address())
-        return r
-
-    def write(self, r: Register) -> None:
-        self._i2c.write_byte(self._device_address, r.address(), r.value)
+    def __init__(self, i2c, device_address: int = 0x6A):
+        super().__init__(i2c, device_address)
