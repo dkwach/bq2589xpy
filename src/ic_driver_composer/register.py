@@ -9,8 +9,9 @@ class BitField:
     ) -> None:
         self.width = width
         self.offset = 0
-        self.mask = (1 << self.width) - 1
         self.default = default
+
+        self.mask = (1 << self.width) - 1
 
     def __get__(self, obj, _):
         if obj is None:
@@ -67,6 +68,20 @@ class Register(metaclass=RegisterMeta):
 
     def address() -> int:
         raise NotImplementedError
+
+
+class RegXX(Register):
+    def __init__(self, value=0):
+        self._check_size()
+        super().__init__(value)
+
+    @classmethod
+    def _check_size(cls):
+        assert cls.size == 8
+
+    def address(self):
+        cls_name = type(self).__name__
+        return int(cls_name[-2:], base=16)
 
 
 if __name__ == "__main__":

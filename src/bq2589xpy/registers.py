@@ -1,6 +1,6 @@
 from enum import Flag, auto
 
-from ic_driver_composer.register import BitField, Register
+from ic_driver_composer.register import BitField, RegXX
 
 
 class Reset(Flag):
@@ -31,21 +31,7 @@ class BqBitField(BitField):
         super().__init__(width, default)
 
 
-class BqRegister(Register):
-    def __init__(self, value=0):
-        self._check_size()
-        super().__init__(value)
-
-    @classmethod
-    def _check_size(cls):
-        assert cls.size == 8
-
-    def address(self):
-        cls_name = type(self).__name__
-        return int(cls_name[-2:], base=16)
-
-
-class REG00(BqRegister):
+class REG00(RegXX):
     IINLIM = BqBitField(width=6, default=0b0001000, bit_type=READ_WRITE, reset=Reset.REG_RST)
     """Input Current Limit
     Offset: 100mA
@@ -81,7 +67,7 @@ class REG00(BqRegister):
     1 – Enable"""
 
 
-class REG02(BqRegister):
+class REG02(RegXX):
     AUTO_DPDM_EN = BqBitField(width=1, default=1, bit_type=READ_WRITE, reset=Reset.REG_RST)
     """Automatic D+/D- Detection Enable
     0 –Disable D+/D- or PSEL detection when VBUS is plugged-in
@@ -134,7 +120,7 @@ class REG02(BqRegister):
     """
 
 
-class REG03(BqRegister):
+class REG03(RegXX):
     Reserved = BqBitField(width=1, default=1, bit_type=READ_WRITE, reset=Reset.REG_RST | Reset.WATCHDOG)
     """Reserved (default = 0)"""
 
@@ -170,7 +156,7 @@ class REG03(BqRegister):
     1 – Enabled"""
 
 
-class REG04(BqRegister):
+class REG04(RegXX):
     ICHG = BqBitField(width=7, default=0b0100000, bit_type=READ_WRITE, reset=Reset.SOFTWARE | Reset.WATCHDOG)
     """Fast Charge Current Limit
     Offset: 0mARange: 0mA (0000000) – 5056mA (1001111)
@@ -185,7 +171,7 @@ class REG04(BqRegister):
     1- Enable Current pulse control (PUMPX_UP and PUMPX_DN)"""
 
 
-class REG0B(BqRegister):
+class REG0B(RegXX):
     VSYS_STAT = BqBitField(width=1, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """VSYS Regulation Status
     0 – Not in VSYSMIN regulation (BAT > VSYSMIN)
@@ -223,7 +209,7 @@ class REG0B(BqRegister):
     Note: Software current limit is reported in IINLIM register"""
 
 
-class REG0C(BqRegister):
+class REG0C(RegXX):
     NTC_FAULT = BqBitField(width=3, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """NTC Fault Status
     Buck Mode:
@@ -260,7 +246,7 @@ class REG0C(BqRegister):
     1- Watchdog timer expiration"""
 
 
-class REG0E(BqRegister):
+class REG0E(RegXX):
     BATV = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADC conversion of Battery Voltage (VBAT)
     Offset: 2.304V
@@ -281,7 +267,7 @@ class REG0E(BqRegister):
     1 – In Thermal Regulation"""
 
 
-class REG0F(BqRegister):
+class REG0F(RegXX):
     SYSV = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADDC conversion of System Voltage (VSYS)
     Offset: 2.304V
@@ -301,7 +287,7 @@ class REG0F(BqRegister):
     """
 
 
-class REG10(BqRegister):
+class REG10(RegXX):
     TSPCT = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADC conversion of TS Voltage (TS) as percentage of REGN
     Offset: 21%
@@ -321,7 +307,7 @@ class REG10(BqRegister):
     """
 
 
-class REG11(BqRegister):
+class REG11(RegXX):
     VBUSV = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADC conversion of VBUS voltage (VBUS)
     Offset: 2.6V
@@ -343,7 +329,7 @@ class REG11(BqRegister):
     """
 
 
-class REG12(BqRegister):
+class REG12(RegXX):
     ICHGR = BqBitField(width=7, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """ADC conversion of Charge Current (IBAT) when VBAT >
     VBATSHORT
@@ -365,7 +351,7 @@ class REG12(BqRegister):
     """Always reads 0"""
 
 
-class REG14(BqRegister):
+class REG14(RegXX):
     DEV_REV = BqBitField(width=2, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """Device Revision: 01"""
 

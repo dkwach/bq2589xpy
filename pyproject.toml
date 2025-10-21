@@ -18,6 +18,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ui = ["flask"]
+ai = ["langchain", "langgraph", "langchain-openai", "langgraph-cli", "pydantic-settings"]
 
 [tool.setuptools_scm]
 version_file = "_version.py"
