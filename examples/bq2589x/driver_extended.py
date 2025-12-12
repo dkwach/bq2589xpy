@@ -1,7 +1,7 @@
 import logging
 import time
 
-from bq2589xpy import driver, registers
+from . import driver, registers
 
 logger = logging.getLogger(__name__)
 

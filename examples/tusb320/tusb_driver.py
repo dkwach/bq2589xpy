@@ -1,5 +1,6 @@
-from ic_driver_composer.driver import Driver
-from tusb320 import registers
+from driver_composer.driver import Driver
+
+from . import registers
 
 
 class TUsbDriver(Driver):

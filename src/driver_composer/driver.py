@@ -1,5 +1,5 @@
-from ic_driver_composer.communication.i2c_backend import I2C
-from ic_driver_composer.register import Register
+from driver_composer.communication.i2c import I2C
+from driver_composer.register import Register
 
 
 class Driver:

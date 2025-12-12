@@ -1,7 +1,8 @@
 import logging
 
-from bq2589xpy import registers
-from ic_driver_composer.driver import Driver
+from driver_composer.driver import Driver
+
+from . import registers
 
 logger = logging.getLogger(__name__)
 

@@ -1,17 +1,17 @@
 import importlib
 import os
 
-from ic_driver_composer.communication.thread_safe_i2c import ThreadSafeI2C
+from driver_composer.communication.safe_i2c import ThreadSafeI2C
 
 
 def create(backend: str = "", drivers_list: list[str] = None) -> tuple:
-    backend = backend or os.environ.get("I2C_BACKEND", "mock")
+    backend = backend or os.environ.get("I2C_BACKEND")
     if backend == "smbus":
-        from ic_driver_composer.communication import smbus
+        from driver_composer.communication import smbus
 
         i2c_backend = smbus.SMbusI2C()
     else:
-        from ic_driver_composer.communication import mock
+        from driver_composer.communication import mock
 
         i2c_backend = mock.MockI2C()
 

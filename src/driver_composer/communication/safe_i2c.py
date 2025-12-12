@@ -1,9 +1,9 @@
 import threading
 
-from .i2c_backend import I2C
+from .i2c import I2C
 
 
-class ThreadSafeI2C:
+class ThreadSafeI2C(I2C):
     def __init__(self, i2c: I2C):
         self._i2c = i2c
         self._lock = threading.Lock()

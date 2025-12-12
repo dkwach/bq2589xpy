@@ -1,6 +1,6 @@
 from enum import Flag, auto
 
-from ic_driver_composer.register import BitField, RegXX
+from driver_composer.register import BitField, RegXX
 
 
 class Reset(Flag):
@@ -48,7 +48,7 @@ class REG00(RegXX):
     Unknown Adapter = 500mA
     Non-Standard Adapter = 1A/2A/2.1A/2.4A
 
-        TODO MAPPING: 
+        TODO MAPPING:
             IINLIM[5] -> 1600mA
             IINLIM[4] -> 800mA
             IINLIM[3] -> 400mA
@@ -130,7 +130,7 @@ class REG03(RegXX):
     Range 3.0V-3.7V
     Default: 3.5V (101)
 
-            TODO MAPPING: 
+            TODO MAPPING:
             SYS_MIN[2] -> 0.4V
             SYS_MIN[1] -> 0.2V
             SYS_MIN[0] -> 0.1V"""
@@ -198,7 +198,7 @@ class REG0B(RegXX):
     VBUS_STAT = BqBitField(width=3, default=None, bit_type=BitType.READ, reset=Reset.NOT_SPECIFIED)
     """BUS Status register
     BQ25895
-    000: No Input 
+    000: No Input
     001: USB Host SDP
     010: USB CDP (1.5A)
     011: USB DCP (3.25A)
@@ -252,7 +252,7 @@ class REG0E(RegXX):
     Offset: 2.304V
     Range: 2.304V (0000000) – 4.848V (1111111)
     Default: 2.304V (0000000)
-    TODO MAPPING: 
+    TODO MAPPING:
         BATV[6] -> 1280mV
         BATV[5] -> 640mV
         BATV[4] -> 320mV
@@ -273,7 +273,7 @@ class REG0F(RegXX):
     Offset: 2.304V
     Range: 2.304V (0000000) – 4.848V (1111111)
     Default: 2.304V (0000000)
-    TODO MAPPING: 
+    TODO MAPPING:
         SYSV[6] -> 1280mV
         SYSV[5] -> 640mV
         SYSV[4] -> 320mV
@@ -293,7 +293,7 @@ class REG10(RegXX):
     Offset: 21%
     Range 21% (0000000) – 80% (1111111)
     Default: 21% (0000000)
-    TODO MAPPING: 
+    TODO MAPPING:
         TSPCT[6] -> 29.76%
         TSPCT[5] -> 14.88%
         TSPCT[4] -> 7.44%
@@ -313,7 +313,7 @@ class REG11(RegXX):
     Offset: 2.6V
     Range 2.6V (0000000) – 15.3V (1111111)
     Default: 2.6V (0000000)
-    TODO MAPPING: 
+    TODO MAPPING:
         VBUSV[6] -> 6400mV
         VBUSV[5] -> 3200mV
         VBUSV[4] -> 1600mV
@@ -338,7 +338,7 @@ class REG12(RegXX):
     Default: 0mA (0000000)
     Note:
     This register returns 0000000 for VBAT < VBATSHORT
-    TODO MAPPING: 
+    TODO MAPPING:
         ICHGR[6] -> 3200mA
         ICHGR[5] -> 1600mA
         ICHGR[4] -> 800mA

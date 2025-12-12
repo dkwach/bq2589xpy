@@ -1,6 +1,6 @@
 from enum import Flag, auto
 
-from ic_driver_composer.register import BitField, Register
+from driver_composer.register import BitField, Register
 
 
 class ACCESS(Flag):

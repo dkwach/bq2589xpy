@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bq2589xpy"
-description = "i2c driver for bq2589x chargers"
+name = "driver_composer"
+description = "i2c driver composer for different IC"
 dynamic = ["version"]
 readme = "README.md"
 

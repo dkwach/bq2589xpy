@@ -5,8 +5,8 @@ from functools import lru_cache
 
 from flask import Flask, jsonify, render_template, request
 
-from ic_driver_composer.app.create_drivers import create
-from ic_driver_composer.register import Register
+from driver_composer.register import Register
+from driver_composer.register_monitor.create_drivers import create
 
 app = Flask(__name__)
 drivers = create()
