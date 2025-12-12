@@ -1,5 +1,6 @@
 from enum import Flag, auto
 
+from driver_composer.driver import Driver
 from driver_composer.register import BitField, Register
 
 
@@ -152,6 +153,15 @@ class REG0A(TUsbRegister):
     01 – 116 ms
     10 – 151 ms
     11 – 168 ms"""
+
+
+class TUsbDriver(Driver):
+    REG08 = REG08()
+    REG09 = REG09()
+    REG0A = REG0A()
+
+    def __init__(self, i2c, device_address=106):
+        super().__init__(i2c, device_address)
 
 
 if __name__ == "__main__":

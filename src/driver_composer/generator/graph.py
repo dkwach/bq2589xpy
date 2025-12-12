@@ -53,9 +53,7 @@ async def read_datasheet(state: InternalState) -> InternalState:
 
 async def retrieve_docs_with_registers(state: InternalState) -> InternalState:
     state.docs_with_registers = await retrieve_documents(
-        retriever=make_retriever(
-            state.datasheet_docs, state.config.fraction_of_doc_to_use
-        ),
+        retriever=make_retriever(state.datasheet_docs, state.config.fraction_of_doc_to_use),
         query=", ".join(state.config.register_keywords),
     )
     return state
@@ -72,6 +70,8 @@ async def create_driver_model(state: InternalState) -> InternalState:
         "Extract all registers from the following datasheet content.",
         "Provide the register name, address, description, and fields,"
         "(with their name, bit offset, bit width, description, access type, and default value).",
+        "Reserved/Dummy fields should also be included with their bit offset and width. "
+        "(In case of two or more reserved fields call them Reserved1, Reserved2, etc.)",
         "If there are no registers, return an empty list.",
         "\n\nDatasheet Content:\n",
         state.datasheet_content,
@@ -94,9 +94,7 @@ async def generate_driver_code(state: InternalState) -> InternalState:
 
 
 def create_graph() -> StateGraph:
-    builder = StateGraph(
-        InternalState, input_schema=InputState, output_schema=OutputState
-    )
+    builder = StateGraph(InternalState, input_schema=InputState, output_schema=OutputState)
     builder.add_node("read_datasheet", read_datasheet)
     builder.add_node("retrieve_docs_with_registers", retrieve_docs_with_registers)
     builder.add_node("set_docs_with_registers", set_docs_with_registers)
@@ -106,9 +104,7 @@ def create_graph() -> StateGraph:
     builder.add_edge(START, "read_datasheet")
     builder.add_conditional_edges(
         "read_datasheet",
-        lambda state: "set_docs_with_registers"
-        if state.datasheet_pages
-        else "retrieve_docs_with_registers",
+        lambda state: "set_docs_with_registers" if state.datasheet_pages else "retrieve_docs_with_registers",
     )
     builder.add_edge("set_docs_with_registers", "create_driver_model")
     builder.add_edge("retrieve_docs_with_registers", "create_driver_model")
@@ -139,9 +135,7 @@ if __name__ == "__main__":
         res = asyncio.run(graph.ainvoke({"datasheet": datasheet_path}))
 
         out = OutputState(**res)
-        pathlib.Path(collected_model_path).write_text(
-            out.model.model_dump_json(indent=4)
-        )
+        pathlib.Path(collected_model_path).write_text(out.model.model_dump_json(indent=4))
         pathlib.Path(driver_path).write_text(out.driver_code)
 
     app()

@@ -1,10 +1,6 @@
-import logging
-
 from driver_composer.driver import Driver
 
 from . import registers
-
-logger = logging.getLogger(__name__)
 
 
 class Bq25895Driver(Driver):
