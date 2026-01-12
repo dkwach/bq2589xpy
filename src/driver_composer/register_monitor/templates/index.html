@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        let intervalId = null;
+        let isEditing = false;
+
+        async function handle_register_response(response) {
+            const html = await response.text();
+                document.getElementById("registersContainer").innerHTML = html;
+                attachInputListeners(); // Reattach listeners after updating content
+                attachFormListeners(); // Attach form listeners for dynamic updates
+                filterTable(); // Reapply the filter after refreshing the content
+        }
+
+        async function updateRegisters() {
+            if (!isEditing) {
+                const driver = document.getElementById('driver-select').value;
+                const response = await fetch(`/read_registers?driver=${driver}`);
+                handle_register_response(response);
+            }
+        }
+
+        function attachInputListeners() {
+            const inputs = document.querySelectorAll('#registersContainer input[type="text"]');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => isEditing = true);
+                input.addEventListener('blur', () => isEditing = false);
+            });
+        }
+
+        async function submitForm(event, form) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            formData.append("driver", document.getElementById('driver-select').value);
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+            });
+            const result = await response.json();
+            if (result.status === "success") {
+                const driver = document.getElementById('driver-select').value;
+                const response = await fetch(`/registers?driver=${driver}`);
+                handle_register_response(response);
+            } else {
+                alert(result.message || "An error occurred.");
+            }
+            isEditing = false;
+        }
+
+        function submitOnEnter(event, form) {
+            if (event.key === "Enter") {
+                submitForm(event, form);
+            }
+        }
+
+        function attachFormListeners() {
+            const forms = document.querySelectorAll('#registersContainer form');
+            forms.forEach(form => {
+                form.addEventListener('submit', (event) => submitForm(event, form));
+            });
+        }
+
+        function startAutoRefresh() {
+            const periodInput = document.getElementById('update-period');
+            const period = parseInt(periodInput.value, 10) * 1000;
+            if (!intervalId) {
+                intervalId = setInterval(updateRegisters, period);
+                document.getElementById("toggleBtn").innerText = "Stop Auto-Refresh";
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                document.getElementById("toggleBtn").innerText = "Start Auto-Refresh";
+            }
+        }
+
+        function toggleRefresh() {
+            if (intervalId) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+            }
+        }
+
+        function updateRefreshPeriod() {
+            if (intervalId) {
+                stopAutoRefresh();
+                startAutoRefresh();
+            }
+        }
+
+        window.onload = function () {
+            const periodInput = document.getElementById('update-period');
+            periodInput.addEventListener('input', updateRefreshPeriod);
+            updateRegisters();
+        };
+
+        function filterTable() {
+            const fieldFilter = document.getElementById('filter-field').value.toLowerCase();
+            const rows = document.querySelectorAll('#registersContainer tbody tr');
+
+            rows.forEach(row => {
+                const fieldNames = Array.from(row.querySelectorAll('td:nth-child(3) table tbody tr td:first-child'))
+                    .map(td => td.textContent.toLowerCase());
+
+                const matchesField = fieldNames.some(fieldName => fieldName.includes(fieldFilter));
+
+                row.style.display = matchesField ? '' : 'none';
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="controlContainer">
+        <select id="driver-select" onchange="updateRegisters()">
+            {% for driver in drivers %}
+                <option value="{{ driver }}">{{ driver }}</option>
+            {% endfor %}
+        </select>
+        <input id="update-period" type="number" placeholder="Update period (s)" min="1" value="5">
+        <button id="toggleBtn" onclick="toggleRefresh()">Enable Cyclic Update</button>
+        <button id="refreshBtn" onclick="updateRegisters()">Refresh</button>
+        <input id="filter-field" type="text" placeholder="Filter by bit field name" oninput="filterTable()">
+    </div>
+    <div id="registersContainer">
+        <!-- The register will be loaded here -->
+    </div>
+</body>
+</html>
