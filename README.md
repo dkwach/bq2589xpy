@@ -1,65 +1,87 @@
 # Driver Composer
-Simple package to qucly start prototyping with i2c controlled device when there is no existing
-i2c driver. It is providing utilities to:
-* write your own driver just by defining registers classes by coping description and some minimal set
-of metadata from i2c device datasheet.
-* register monitor - simple flask app, which monitor and write registers in connected devices controlled by env variables.
-* generator - simple agent, which can read device datasheet and generate driver for you.
 
-# Platform
- * linux based - raspberry pi
- * micropython comatiblityy - WIP
+Driver Composer is a simple package designed to help you quickly prototype with I2C-controlled devices when no existing I2C driver is available. It provides utilities for:
 
-# core
- It is providing all utilities to define bit fields, registers and driver.
- Look at tusb320 example to see what you have to do define to get working driver.
+- Writing your own driver by defining register classes based on the device datasheet, with minimal metadata.
+- A register monitor: a simple Flask app to monitor and write registers in connected devices, controlled via environment variables.
+- A generator: an agent that can read a device datasheet and generate a driver for you.
 
- Implementation is based on python descriptors and small metadata class to make order of bit field declaration meaningful -
- order should reflect register layout (from less meaningful bit at top of register class definition)
+---
 
-# monitor
+## Platform Compatibility
 
-Small Flask app to monitor/write drivers in web interface controlled by env variables.
-See examples/.env.example as reference
+- **Linux-based systems**: e.g., Raspberry Pi.
+- **MicroPython compatibility**: Work in progress (WIP).
 
-Install with ui option
+---
+
+## Core Functionality
+
+The core of Driver Composer provides utilities to define bit fields, registers, and drivers. Check the `tusb320` example to understand the minimal requirements for defining a working driver.
+
+The implementation is based on Python descriptors and a small metadata class to ensure the order of bit field declarations reflects the register layout (from the least significant bit at the top of the register class definition).
+
+---
+
+## Register Monitor
+
+The register monitor is a small Flask app that provides a web interface to monitor and write registers. It is controlled via environment variables.
+
+### Installation
+
+Install the package with the `ui` option:
+
 ```
 pip install .[ui]
 ```
 
-Run
+### Running the Monitor
+
+Run the Flask app with the following command:
+
 ```
-python -m flask --app driver_composer.register_monitor.main -e examples/.env.ui.example run
+python -m flask --app driver_composer.register_monitor.main --env-file examples/.env.ui.example run
 ```
 
+Refer to `examples/.env.example` for environment variable configuration.
 
-# generator
-Graph/agent which can generate driver for you just by providing path or url to device datasheet
+---
 
-> [!CAUTION]
-> AI agents can hallucinate (produce incorrect or misleading output). For that reason, any generated driver must be reviewed and thoroughly
-> tested before use. Using a driver without proper verification is at your own risk and may lead to malfunctions, data loss, or damage to your > device.
+## Driver Generator
 
-> [!CAUTION]
-> In default configuration input file, will be send to llm (openAI), please keep in mind what you are sending and check how model provider
-is processing and keeping sent data.
+The generator is an agent that can create a driver for you by analyzing the path or URL of a device datasheet.
 
+> **⚠ CAUTION**
+> AI agents can produce incorrect or misleading output. Any generated driver must be reviewed and thoroughly tested before use. Using an unverified driver may lead to malfunctions, data loss, or device damage.
 
-Install with ai option
+> **⚠ CAUTION**
+> By default, the input file will be sent to an LLM (e.g., OpenAI). Be mindful of the data you share and review the model provider's data processing and retention policies.
+
+### Installation
+
+Install the package with the `ai` option:
+
 ```
 pip install .[ai]
 ```
 
-Set your openAI key and set model before usage
-You can use `examples/.env.ai.example` as reference
-or change llm.py to use different model
+### Configuration
 
+Set your OpenAI API key and model before usage. You can use `examples/.env.ai.example` as a reference or modify `llm.py` to use a different model.
 
-Usage
+### Usage
 
-> [!CAUTION]
-> This llm run can be token consuming so be careful.
+> **⚠ CAUTION**
+> Running the LLM can consume a significant number of tokens. Use it cautiously.
 
+Run the generator with the following command:
 
 ```
-python -m driver_composer.generator --datasheet-path path_to_local_pdf_or_url_with_pdf```
+python -m driver_composer.generator --datasheet-path path_to_local_pdf_or_url_with_pdf
+```
+
+---
+
+## Examples
+
+Refer to the `examples` directory for sample `.env` files and usage scenarios.
