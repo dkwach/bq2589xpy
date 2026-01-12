@@ -1,4 +1,5 @@
 import collections
+import html
 import inspect
 import re
 from functools import lru_cache
@@ -68,7 +69,7 @@ def get_registers(driver, update: bool = False):
 def get_bit_filed_doc(reg: Register, bit_field_name: str):
     source = inspect.getsource(type(reg))
     doc = re.search(rf'{bit_field_name} =.*?"""(.*?)"""', source, re.DOTALL)
-    return doc.group(1).replace("\n", "<br>") if doc else ""
+    return html.escape(doc.group(1)).replace("\n", "<br>") if doc else ""
 
 
 @app.route("/drivers")

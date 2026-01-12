@@ -115,27 +115,3 @@ def create_graph() -> StateGraph:
     graph = builder.compile()
 
     return graph
-
-
-if __name__ == "__main__":
-    import asyncio
-    import pathlib
-
-    import typer
-
-    app = typer.Typer()
-
-    @app.command()
-    def make_driver(
-        datasheet_path: str = "src/mp2722/MP2722GRH.pdf",
-        collected_model_path: str = "./mp2722_mode.json",
-        driver_path: str = "./mp2722_driver.py",
-    ):
-        graph = create_graph()
-        res = asyncio.run(graph.ainvoke({"datasheet": datasheet_path}))
-
-        out = OutputState(**res)
-        pathlib.Path(collected_model_path).write_text(out.model.model_dump_json(indent=4))
-        pathlib.Path(driver_path).write_text(out.driver_code)
-
-    app()

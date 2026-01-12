@@ -32,3 +32,4 @@ class DriverModel(BaseModel):
     name: str = Field(description="The name of the driver")
     description: None | str = Field(default=None, description="A description of the driver")
     registers: list[Register] = Field(description="A list of registers defined in the driver")
+    i2c_address: int = Field(default=0x00, description="The I2C address of the device")

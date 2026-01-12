@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ui = ["flask"]
+ui = ["flask", "python-dotenv"]
 ai = [
   "Jinja2",
   "typer",
@@ -28,6 +28,7 @@ ai = [
   "langchain-openai",
   "langgraph-cli",
   "rank_bm25",
+  "pypdf",
   "nltk",
   "pydantic-settings"
 ]

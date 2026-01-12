@@ -19,15 +19,11 @@ async def extract_text_from_pdf(pdf_path: str) -> tuple[str, tuple]:
 async def read_pdf(pdf_path_or_url: str) -> str:
     if pdf_path_or_url.endswith(".pdf"):
         return await extract_text_from_pdf(pdf_path_or_url)
-    elif pdf_path_or_url.startswith("http://") or pdf_path_or_url.startswith(
-        "https://"
-    ):
+    elif pdf_path_or_url.startswith("http://") or pdf_path_or_url.startswith("https://"):
         async with aiohttp.ClientSession() as session:
             async with session.get(pdf_path_or_url) as response:
                 response.raise_for_status()
-                with tempfile.NamedTemporaryFile(
-                    suffix=".pdf", delete=False
-                ) as tmp_file:
+                with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
                     tmp_file_path = tmp_file.name
                     async with aiofiles.open(tmp_file_path, mode="wb") as f:
                         await f.write(await response.read())

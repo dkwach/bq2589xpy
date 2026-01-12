@@ -557,5 +557,5 @@ class MP2722(Driver):
     REG15 = REG15()
     REG16 = REG16()
 
-    def __init__(self, i2c, device_address=0):
+    def __init__(self, i2c, device_address=0x3F):
         super().__init__(i2c, device_address)

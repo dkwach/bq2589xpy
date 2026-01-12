@@ -1,7 +1,7 @@
 from enum import Flag, auto
 
 from driver_composer.driver import Driver
-from driver_composer.register import BitField, Register
+from driver_composer.register import BitField, RegXX
 
 
 class ACCESS(Flag):
@@ -27,21 +27,7 @@ class TUsbBitField(BitField):
         super().__init__(width, default)
 
 
-class TUsbRegister(Register):
-    def __init__(self, value=0):
-        self._check_size()
-        super().__init__(value)
-
-    @classmethod
-    def _check_size(cls):
-        assert cls.size == 8
-
-    def address(self):
-        cls_name = type(self).__name__
-        return int(cls_name[-2:], base=16)
-
-
-class REG08(TUsbRegister):
+class REG08(RegXX):
     ACTIVE_CABLE_DETECTION = TUsbBitField(width=1, default=None, access=ACCESS.READ | ACCESS.UPDATE)
     """This flag indicates that an active cable has been plugged
     into the Type-C connector. When this field is set, an active
@@ -76,7 +62,7 @@ class REG08(TUsbRegister):
     11 – Reserved"""
 
 
-class REG09(TUsbRegister):
+class REG09(RegXX):
     RESERVED_0 = TUsbBitField(width=1, default=None, access=ACCESS.READ)
     """Reserved"""
 
@@ -119,7 +105,7 @@ class REG09(TUsbRegister):
     11 – Attached to an accessory"""
 
 
-class REG0A(TUsbRegister):
+class REG0A(RegXX):
     RESERVED = TUsbBitField(width=3, default=None, access=ACCESS.READ)
     """Reserved"""
 
@@ -160,11 +146,19 @@ class TUsbDriver(Driver):
     REG09 = REG09()
     REG0A = REG0A()
 
-    def __init__(self, i2c, device_address=106):
+    def __init__(self, i2c, device_address=0x67):
         super().__init__(i2c, device_address)
 
 
 if __name__ == "__main__":
-    r08 = REG08()
-    r09 = REG09()
-    r0A = REG0A()
+    from driver_composer.communication.mock import MockI2C
+
+    driver = TUsbDriver(MockI2C())
+    driver.read(driver.REG08)
+    print(driver.REG08)
+
+    driver.REG08.CURRENT_MODE_ADVERTISE = 2
+    print(driver.REG08)
+
+    driver.REG08.CURRENT_MODE_ADVERTISE = 1
+    print(driver.REG08)
