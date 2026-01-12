@@ -8,7 +8,7 @@ from driver_composer.communication.safe_i2c import ThreadSafeI2C
 def create(backend: str = "", drivers_list: list[str] = None) -> tuple:
     i2c_backend = _get_backend(backend)
 
-    return tuple(_get_drivers(drivers_list, ThreadSafeI2C(i2c_backend)))
+    return tuple(_get_drivers(ThreadSafeI2C(i2c_backend), drivers_list))
 
 
 def _get_backend(backend: str):
