@@ -10,7 +10,7 @@ from driver_composer.register import BitField, Register
 {% endfor %}
 {% endfor %}
 
-class {{ model.driver_name }}(Driver):
+class {{ model.name }}(Driver):
 {% for reg in model.registers %}    {{ reg.name }} = {{ reg.name }}()
 {% endfor %}
 
